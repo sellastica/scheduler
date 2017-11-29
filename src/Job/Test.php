@@ -1,5 +1,7 @@
 <?php
-namespace Scheduler\Job;
+namespace Sellastica\Scheduler\Job;
+
+use Scheduler\Job\AbstractJob;
 
 class Test extends AbstractJob
 {

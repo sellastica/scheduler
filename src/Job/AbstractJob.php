@@ -1,5 +1,5 @@
 <?php
-namespace Scheduler\Job;
+namespace Sellastica\Scheduler\Job;
 
 use Sellastica\Project\Entity\Project;
 use Sellastica\Scheduler\Entity\SchedulerJobSetting;
