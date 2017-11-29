@@ -1,0 +1,21 @@
+{
+	"name": "sellastica/scheduler",
+	"homepage": "https://github.com/sellastica/scheduler",
+	"license": "proprietary",
+	"authors": [
+		{
+			"name": "Tomáš Krejčí",
+			"homepage": "http://www.sellastica.com"
+		}
+	],
+	"require": {
+		"php": ">=7.1"
+	},
+	"require-dev": {
+	},
+	"autoload": {
+		"psr-4": {
+			"Sellastica\\Scheduler\\": "src/"
+		}
+	}
+}
