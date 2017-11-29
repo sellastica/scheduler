@@ -1,8 +1,6 @@
 <?php
 namespace Sellastica\Scheduler\Job;
 
-use Scheduler\Job\AbstractJob;
-
 class Test extends AbstractJob
 {
 	protected function run()
