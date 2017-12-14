@@ -21,7 +21,7 @@ class SchedulerLogDibiMapper extends DibiMapper
 	{
 		$result = $this->database->select('sl.id')
 			->from($this->getTableName(true))->as('sl')
-			->leftJoin('crm.scheduler_job_setting')->as('s')
+			->leftJoin($this->environment->getCrmDatabaseName() . '.scheduler_job_setting')->as('s')
 				->on('sl.jobId = s.id')
 			->where('sl.start IS NOT null')
 			->where('sl.end IS null')
@@ -64,7 +64,7 @@ class SchedulerLogDibiMapper extends DibiMapper
 	public function getJobLastRunDate($jobCode, $success = null)
 	{
 		$result = $this->database->select('MAX(start)')
-			->from('crm.scheduler_job_setting s')
+			->from($this->environment->getCrmDatabaseName() . '.scheduler_job_setting s')
 			->innerJoin($this->getTableName(true))->as('sl')
 				->on('s.id = sl.jobId')
 			->where('s.code = %s', $jobCode);
