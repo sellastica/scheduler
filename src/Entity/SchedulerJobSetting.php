@@ -15,22 +15,14 @@ class SchedulerJobSetting extends AbstractEntity implements IEntity
 
 	/** @var string @required */
 	private $className;
-	/** @var int|null @optional */
-	private $projectId;
-	/** @var int @required */
-	private $period;
-	/** @var \DateTime|null @optional Last job run start */
-	private $lastRun;
-	/** @var \DateTime|null @optional Last job run end */
-	private $lastRunEnd;
 	/** @var string|null @optional */
 	private $params;
+	/** @var int|null @optional */
+	private $priority;
 	/** @var bool @optional */
 	private $manual = true;
 	/** @var bool @optional */
 	private $active = false;
-	/** @var int|null @optional */
-	private $priority;
 
 
 	/**
@@ -63,70 +55,6 @@ class SchedulerJobSetting extends AbstractEntity implements IEntity
 	public function setClassName(string $className)
 	{
 		$this->className = $className;
-	}
-
-	/**
-	 * @return int|null
-	 */
-	public function getProjectId(): ?int
-	{
-		return $this->projectId;
-	}
-
-	/**
-	 * @param int|null $projectId
-	 */
-	public function setProjectId(?int $projectId)
-	{
-		$this->projectId = $projectId;
-	}
-
-	/**
-	 * @return int
-	 */
-	public function getPeriod(): int
-	{
-		return $this->period;
-	}
-
-	/**
-	 * @param int $period
-	 */
-	public function setPeriod(int $period)
-	{
-		$this->period = $period;
-	}
-
-	/**
-	 * @return \DateTime|null
-	 */
-	public function getLastRunStart(): ?\DateTime
-	{
-		return $this->lastRun;
-	}
-
-	/**
-	 * @param \DateTime|null $lastRun
-	 */
-	public function setLastRun(?\DateTime $lastRun)
-	{
-		$this->lastRun = $lastRun;
-	}
-
-	/**
-	 * @return \DateTime|null
-	 */
-	public function getLastRunEnd(): ?\DateTime
-	{
-		return $this->lastRunEnd;
-	}
-
-	/**
-	 * @param \DateTime|null $lastRunEnd
-	 */
-	public function setLastRunEnd(?\DateTime $lastRunEnd)
-	{
-		$this->lastRunEnd = $lastRunEnd;
 	}
 
 	/**
@@ -200,11 +128,7 @@ class SchedulerJobSetting extends AbstractEntity implements IEntity
 	{
 		return [
 			'id' => $this->id,
-			'projectId' => $this->projectId,
 			'className' => $this->className,
-			'period' => $this->period,
-			'lastRun' => $this->lastRun,
-			'lastRunEnd' => $this->lastRunEnd,
 			'params' => $this->params,
 			'priority' => $this->priority,
 			'manual' => $this->manual,

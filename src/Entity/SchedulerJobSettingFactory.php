@@ -21,6 +21,7 @@ class SchedulerJobSettingFactory extends EntityFactory
 	/** @var \Sellastica\Project\Model\ProjectAccessor */
 	private $projectAccessor;
 
+
 	/**
 	 * @param \Sellastica\Entity\EntityManager $em
 	 * @param IDomainEventPublisher $eventPublisher

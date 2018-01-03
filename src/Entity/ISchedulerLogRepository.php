@@ -37,9 +37,17 @@ interface ISchedulerLogRepository extends IRepository
 	function clearOldLogEntries(\DateTime $endDate);
 
 	/**
-	 * @param string $jobCode
+	 * @param int $jobId
+	 * @param int $projectId
 	 * @param bool $success
 	 * @return \DateTime|null
 	 */
-	function getJobLastRunDate(string $jobCode, bool $success = null);
+	function getJobLastRunStart(int $jobId, int $projectId, bool $success = null): ?\DateTime;
+
+	/**
+	 * @param int $jobId
+	 * @param int $projectId
+	 * @return \DateTime|null
+	 */
+	function getJobLastRunEnd(int $jobId, int $projectId): ?\DateTime;
 }

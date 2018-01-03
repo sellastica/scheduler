@@ -38,12 +38,23 @@ class SchedulerLogRepository extends Repository implements ISchedulerLogReposito
 	}
 
 	/**
-	 * @param string $jobCode
+	 * @param int $jobId
+	 * @param int $projectId
 	 * @param bool $success
 	 * @return \DateTime|null
 	 */
-	public function getJobLastRunDate(string $jobCode, bool $success = null)
+	public function getJobLastRunStart(int $jobId, int $projectId, bool $success = null): ?\DateTime
 	{
-		return $this->dao->getJobLastRunDate($jobCode, $success);
+		return $this->dao->getJobLastRunStart($jobId, $projectId, $success);
+	}
+
+	/**
+	 * @param int $jobId
+	 * @param int $projectId
+	 * @return \DateTime|null
+	 */
+	public function getJobLastRunEnd(int $jobId, int $projectId): ?\DateTime
+	{
+		return $this->dao->getJobLastRunEnd($jobId, $projectId);
 	}
 }

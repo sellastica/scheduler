@@ -41,13 +41,24 @@ class SchedulerLogDao extends Dao
 	}
 
 	/**
-	 * @param string $jobCode
+	 * @param int $jobId
+	 * @param int $projectId
 	 * @param bool $success
 	 * @return \DateTime|null
 	 */
-	public function getJobLastRunDate($jobCode, $success = null)
+	public function getJobLastRunStart(int $jobId, int $projectId, $success = null): ?\DateTime
 	{
-		return $this->mapper->getJobLastRunDate($jobCode, $success);
+		return $this->mapper->getJobLastRunStart($jobId, $projectId, $success);
+	}
+
+	/**
+	 * @param int $jobId
+	 * @param int $projectId
+	 * @return \DateTime|null
+	 */
+	public function getJobLastRunEnd(int $jobId, int $projectId): ?\DateTime
+	{
+		return $this->mapper->getJobLastRunEnd($jobId, $projectId);
 	}
 
 	/**
@@ -55,7 +66,7 @@ class SchedulerLogDao extends Dao
 	 */
 	protected function getBuilder($data, $first = null, $second = null): IBuilder
 	{
-		return SchedulerLogBuilder::create($data->manual)
+		return SchedulerLogBuilder::create($data->jobId, $data->projectId, $data->manual)
 			->hydrate($data);
 	}
 

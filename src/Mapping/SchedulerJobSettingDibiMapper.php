@@ -19,10 +19,14 @@ class SchedulerJobSettingDibiMapper extends DibiMapper
 	 */
 	public function findByProjectId(int $projectId): array
 	{
-		$resource = $this->getResourceWithIds()
-			->where('active = 1')
-			->where('(projectId = %i OR projectId IS NULL)', $projectId)
-			->orderBy('priority');
-		return $this->getArray($resource->fetchAll());
+		return $this->database->select('s.id')
+			->from($this->getTableName(true))->as('s')
+			->innerJoin('%n.scheduler_project', $this->environment->getCrmDatabaseName())->as('sp')
+			->on('sp.jobId = s.id')
+			->where('s.active = 1')
+			->where('sp.active = 1')
+			->where('(sp.projectId = %i OR sp.projectId IS NULL)', $projectId)
+			->orderBy('priority')
+			->fetchPairs();
 	}
 }

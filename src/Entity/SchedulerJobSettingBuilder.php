@@ -13,34 +13,21 @@ class SchedulerJobSettingBuilder implements IBuilder
 
 	/** @var string */
 	private $className;
-	/** @var int */
-	private $period;
-	/** @var int|null */
-	private $projectId;
-	/** @var \DateTime|null */
-	private $lastRun;
-	/** @var \DateTime|null */
-	private $lastRunEnd;
 	/** @var string|null */
 	private $params;
+	/** @var int|null */
+	private $priority;
 	/** @var bool */
 	private $manual = true;
 	/** @var bool */
 	private $active = false;
-	/** @var int|null */
-	private $priority;
 
 	/**
 	 * @param string $className
-	 * @param int $period
 	 */
-	public function __construct(
-		string $className,
-		int $period
-	)
+	public function __construct(string $className)
 	{
 		$this->className = $className;
-		$this->period = $period;
 	}
 
 	/**
@@ -49,68 +36,6 @@ class SchedulerJobSettingBuilder implements IBuilder
 	public function getClassName(): string
 	{
 		return $this->className;
-	}
-
-	/**
-	 * @return int
-	 */
-	public function getPeriod(): int
-	{
-		return $this->period;
-	}
-
-	/**
-	 * @return int|null
-	 */
-	public function getProjectId()
-	{
-		return $this->projectId;
-	}
-
-	/**
-	 * @param int|null $projectId
-	 * @return $this
-	 */
-	public function projectId(int $projectId = null)
-	{
-		$this->projectId = $projectId;
-		return $this;
-	}
-
-	/**
-	 * @return \DateTime|null
-	 */
-	public function getLastRun()
-	{
-		return $this->lastRun;
-	}
-
-	/**
-	 * @param \DateTime|null $lastRun
-	 * @return $this
-	 */
-	public function lastRun(\DateTime $lastRun = null)
-	{
-		$this->lastRun = $lastRun;
-		return $this;
-	}
-
-	/**
-	 * @return \DateTime|null
-	 */
-	public function getLastRunEnd()
-	{
-		return $this->lastRunEnd;
-	}
-
-	/**
-	 * @param \DateTime|null $lastRunEnd
-	 * @return $this
-	 */
-	public function lastRunEnd(\DateTime $lastRunEnd = null)
-	{
-		$this->lastRunEnd = $lastRunEnd;
-		return $this;
 	}
 
 	/**
@@ -128,6 +53,24 @@ class SchedulerJobSettingBuilder implements IBuilder
 	public function params(string $params = null)
 	{
 		$this->params = $params;
+		return $this;
+	}
+
+	/**
+	 * @return int|null
+	 */
+	public function getPriority()
+	{
+		return $this->priority;
+	}
+
+	/**
+	 * @param int|null $priority
+	 * @return $this
+	 */
+	public function priority(int $priority = null)
+	{
+		$this->priority = $priority;
 		return $this;
 	}
 
@@ -168,24 +111,6 @@ class SchedulerJobSettingBuilder implements IBuilder
 	}
 
 	/**
-	 * @return int|null
-	 */
-	public function getPriority()
-	{
-		return $this->priority;
-	}
-
-	/**
-	 * @param int|null $priority
-	 * @return $this
-	 */
-	public function priority(int $priority = null)
-	{
-		$this->priority = $priority;
-		return $this;
-	}
-
-	/**
 	 * @return bool
 	 */
 	public function generateId(): bool
@@ -203,14 +128,10 @@ class SchedulerJobSettingBuilder implements IBuilder
 
 	/**
 	 * @param string $className
-	 * @param int $period
 	 * @return self
 	 */
-	public static function create(
-		string $className,
-		int $period
-	): self
+	public static function create(string $className): self
 	{
-		return new self($className, $period);
+		return new self($className);
 	}
 }

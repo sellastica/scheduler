@@ -23,8 +23,13 @@ class SchedulerLogRepositoryProxy extends RepositoryProxy implements \Sellastica
 		$this->getRepository()->clearOldLogEntries($endDate);
 	}
 
-	public function getJobLastRunDate(string $jobCode, bool $success = null)
+	public function getJobLastRunStart(int $jobId, int $projectId, bool $success = null): ?\DateTime
 	{
-		return $this->getRepository()->getJobLastRunDate($jobCode, $success);
+		return $this->getRepository()->getJobLastRunStart($jobId, $projectId, $success);
+	}
+
+	public function getJobLastRunEnd(int $jobId, int $projectId): ?\DateTime
+	{
+		return $this->getRepository()->getJobLastRunEnd($jobId, $projectId);
 	}
 }

@@ -20,22 +20,27 @@ class Scheduler
 	private $projectAccessor;
 	/** @var Nette\DI\Container */
 	private $container;
+	/** @var \Sellastica\Scheduler\Service\SchedulerService */
+	private $schedulerService;
 
 
 	/**
 	 * @param EntityManager $em
 	 * @param \Sellastica\Project\Model\ProjectAccessor $projectAccessor
 	 * @param Nette\DI\Container $container
+	 * @param \Sellastica\Scheduler\Service\SchedulerService $schedulerService
 	 */
 	public function __construct(
 		EntityManager $em,
 		ProjectAccessor $projectAccessor,
-		Nette\DI\Container $container
+		Nette\DI\Container $container,
+		\Sellastica\Scheduler\Service\SchedulerService $schedulerService
 	)
 	{
 		$this->em = $em;
 		$this->projectAccessor = $projectAccessor;
 		$this->container = $container;
+		$this->schedulerService = $schedulerService;
 	}
 
 	public function run()
@@ -67,13 +72,21 @@ class Scheduler
 	 */
 	private function hasJobToRun(SchedulerJobSetting $jobSetting)
 	{
-		if (!$jobSetting->getLastRunStart()) { //never ran before
+		$projectId = $this->projectAccessor->get()->getId();
+		if (!$projectSettings = $this->schedulerService->getProjectSettings($jobSetting->getId(), $projectId)) {
+			return false;
+		}
+
+		$lastRunStart = $this->schedulerService->getLastRunStart($jobSetting->getId(), $projectId);
+		$lastRunEnd = $this->schedulerService->getLastRunEnd($jobSetting->getId(), $projectId);
+
+		if (!$lastRunStart) { //never ran before
 			return true;
-		} elseif (!$jobSetting->getLastRunEnd()) {
+		} elseif (!$lastRunEnd) {
 			//end timestamp may not be logged because of some server error
 			//in that case, we cannot disable jobs for ever!
 			//so, we run all jobs with last start older than one day
-			$lastStart = clone $jobSetting->getLastRunStart();
+			$lastStart = clone $lastRunStart;
 			//add one day interval
 			$lastStart->add(new \DateInterval('P1D'));
 			if ($lastStart < new \DateTime('now')) { //if last start was earlier then before one day
@@ -83,7 +96,8 @@ class Scheduler
 			}
 		}
 
-		return $jobSetting->getLastRunEnd()->getTimestamp() + $jobSetting->getPeriod() <= time();
+		return $lastRunEnd->getTimestamp()
+			+ $projectSettings->getPeriod() <= time();
 	}
 
 	/**
@@ -93,7 +107,7 @@ class Scheduler
 	 */
 	public function runJob(SchedulerJobSetting $jobSetting, bool $manual = false): array
 	{
-		/** @var \Scheduler\Job\AbstractJob $job $job */
+		/** @var \Sellastica\Scheduler\Job\AbstractJob $job */
 		$job = $this->container->getByType($jobSetting->getClassName());
 		$job->setJobSetting($jobSetting);
 		$job->setProject($this->projectAccessor->get());

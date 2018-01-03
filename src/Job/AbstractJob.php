@@ -51,15 +51,11 @@ abstract class AbstractJob
 	 */
 	final public function init(bool $manual = false)
 	{
-		//set job start time
-		$this->jobSetting->setLastRun(new \DateTime());
-		$this->jobSetting->setLastRunEnd(null);
 		//insert record into the scheduler log
 		$this->log = SchedulerLogBuilder::create($this->jobSetting->getId(), $this->project->getId(), $manual)
 			->start(new \DateTime())
 			->build();
 
-		$this->em->persist($this->jobSetting);
 		$this->em->persist($this->log);
 		$this->em->flush();
 
@@ -89,8 +85,6 @@ abstract class AbstractJob
 	}
 
 	/**
-	 * "Destructor", it finishes job, log final status, duration...
-	 *
 	 * @param bool $success
 	 * @param \Throwable $e
 	 * @throws \Throwable
@@ -98,14 +92,11 @@ abstract class AbstractJob
 	 */
 	final public function finish($success = true, \Throwable $e = null)
 	{
-		//set job end time
-		$this->jobSetting->setLastRunEnd(new \DateTime());
 		//add info to log
 		$this->log->setEnd(new \DateTime());
 		$this->log->setSuccess($success);
 		$this->log->setOutput(implode("\n", $this->logMessages));
 
-		$this->em->persist($this->jobSetting);
 		$this->em->persist($this->log);
 		$this->em->flush();
 

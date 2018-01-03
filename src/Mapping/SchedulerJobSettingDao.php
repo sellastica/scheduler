@@ -26,7 +26,7 @@ class SchedulerJobSettingDao extends Dao
 	 */
 	protected function getBuilder($data, $first = null, $second = null): IBuilder
 	{
-		return SchedulerJobSettingBuilder::create($data->className, $data->period)
+		return SchedulerJobSettingBuilder::create($data->className)
 			->hydrate($data);
 	}
 

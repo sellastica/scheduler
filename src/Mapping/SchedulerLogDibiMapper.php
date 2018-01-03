@@ -22,7 +22,7 @@ class SchedulerLogDibiMapper extends DibiMapper
 		$result = $this->database->select('sl.id')
 			->from($this->getTableName(true))->as('sl')
 			->leftJoin($this->environment->getCrmDatabaseName() . '.scheduler_job_setting')->as('s')
-				->on('sl.jobId = s.id')
+			->on('sl.jobId = s.id')
 			->where('sl.start IS NOT null')
 			->where('sl.end IS null')
 			->where('UNIX_TIMESTAMP(sl.start) + s.maxExecutionTime < %i', $dateTime->getTimestamp())
@@ -57,27 +57,44 @@ class SchedulerLogDibiMapper extends DibiMapper
 	}
 
 	/**
-	 * @param string $jobCode
+	 * @param int $jobId
+	 * @param int $projectId
 	 * @param bool $success
 	 * @return \DateTime|null
 	 */
-	public function getJobLastRunDate($jobCode, $success = null)
+	public function getJobLastRunStart(int $jobId, int $projectId, $success = null): ?\DateTime
 	{
 		$result = $this->database->select('MAX(start)')
-			->from($this->environment->getCrmDatabaseName() . '.scheduler_job_setting s')
-			->innerJoin($this->getTableName(true))->as('sl')
-				->on('s.id = sl.jobId')
-			->where('s.code = %s', $jobCode);
+			->from($this->getTableName(true))
+			->where('jobId = %i', $jobId)
+			->where('projectId = %i', $projectId);
 
 		if (!is_null($success)) {
 			$result->where('sl.success = %i', $success);
 		}
 
 		$date = $result->fetchSingle();
-		if ($date) {
-			return new \DateTime($date);
-		} else {
-			return null;
-		}
+		return $date
+			? new \DateTime($date)
+			: null;
+	}
+
+	/**
+	 * @param int $jobId
+	 * @param int $projectId
+	 * @return \DateTime|null
+	 */
+	public function getJobLastRunEnd(int $jobId, int $projectId): ?\DateTime
+	{
+		$date = $this->database->select('[end]')
+			->from($this->getTableName(true))
+			->where('jobId = %i', $jobId)
+			->where('projectId = %i', $projectId)
+			->orderBy('id', \dibi::DESC)
+			->fetchSingle();
+
+		return $date
+			? new \DateTime($date)
+			: null;
 	}
 }
