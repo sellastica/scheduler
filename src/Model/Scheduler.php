@@ -75,6 +75,8 @@ class Scheduler
 		$projectId = $this->projectAccessor->get()->getId();
 		if (!$projectSettings = $this->schedulerService->getProjectSettings($jobSetting->getId(), $projectId)) {
 			return false;
+		} elseif (!$projectSettings->isActive()) {
+			return false;
 		}
 
 		$lastRunStart = $this->schedulerService->getLastRunStart($jobSetting->getId(), $projectId);

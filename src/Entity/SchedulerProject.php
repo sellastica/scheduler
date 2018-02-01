@@ -16,9 +16,9 @@ class SchedulerProject extends AbstractEntity implements IEntity
 	/** @var int @required */
 	private $jobId;
 	/** @var int @required */
-	private $projectId;
-	/** @var int @required */
 	private $period;
+	/** @var int|null @optional Null = all projects */
+	private $projectId;
 	/** @var bool @optional */
 	private $active = false;
 
@@ -56,17 +56,17 @@ class SchedulerProject extends AbstractEntity implements IEntity
 	}
 
 	/**
-	 * @return int
+	 * @return int|null
 	 */
-	public function getProjectId(): int
+	public function getProjectId(): ?int
 	{
 		return $this->projectId;
 	}
 
 	/**
-	 * @param int $projectId
+	 * @param int|null $projectId
 	 */
-	public function setProjectId(int $projectId)
+	public function setProjectId(?int $projectId)
 	{
 		$this->projectId = $projectId;
 	}
@@ -90,7 +90,7 @@ class SchedulerProject extends AbstractEntity implements IEntity
 	/**
 	 * @return bool
 	 */
-	public function getActive(): bool
+	public function isActive(): bool
 	{
 		return $this->active;
 	}
