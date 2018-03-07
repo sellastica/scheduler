@@ -22,8 +22,6 @@ class Scheduler
 	private $container;
 	/** @var \Sellastica\Scheduler\Service\SchedulerService */
 	private $schedulerService;
-	/** @var \Sellastica\Project\Entity\Project */
-	private $project;
 
 
 	/**
@@ -47,7 +45,6 @@ class Scheduler
 
 	public function run()
 	{
-		$this->initialize();
 		$this->setJobsQueue();
 		foreach ($this->queue as $job) {
 			if ($this->hasJobToRun($job)) {
@@ -56,18 +53,13 @@ class Scheduler
 		}
 	}
 
-	private function initialize(): void
-	{
-		$this->project = $this->projectAccessor->get();
-	}
-
 	/**
 	 * Make queue, list all enabled jobs and compute cron if run or not
 	 */
 	private function setJobsQueue(): void
 	{
 		$this->queue = $this->em->getRepository(SchedulerJobSetting::class)->findByProjectId(
-			$this->project->getId()
+			$this->getProject()->getId()
 		);
 	}
 
@@ -78,7 +70,7 @@ class Scheduler
 	 */
 	private function hasJobToRun(SchedulerJobSetting $jobSetting)
 	{
-		if (!$projectSettings = $this->schedulerService->getProjectSettings($jobSetting->getId(), $this->project->getId())) {
+		if (!$projectSettings = $this->schedulerService->getProjectSettings($jobSetting->getId(), $this->getProject()->getId())) {
 			//job is not assigned to this project
 			return false;
 		} elseif (!$projectSettings->isActive()) {
@@ -86,8 +78,8 @@ class Scheduler
 			return false;
 		}
 
-		$lastRunStart = $this->schedulerService->getLastRunStart($jobSetting->getId(), $this->project->getId());
-		$lastRunEnd = $this->schedulerService->getLastRunEnd($jobSetting->getId(), $this->project->getId());
+		$lastRunStart = $this->schedulerService->getLastRunStart($jobSetting->getId(), $this->getProject()->getId());
+		$lastRunEnd = $this->schedulerService->getLastRunEnd($jobSetting->getId(), $this->getProject()->getId());
 
 		if (!$lastRunStart) { //never ran before
 			return true;
@@ -119,7 +111,7 @@ class Scheduler
 		/** @var \Sellastica\Scheduler\Job\AbstractJob $job */
 		$job = $this->container->getByType($jobSetting->getClassName());
 		$job->setJobSetting($jobSetting);
-		$job->setProject($this->project);
+		$job->setProject($this->getProject());
 		$job->init($manual);
 
 		return $job->getLogMessages();
@@ -129,5 +121,13 @@ class Scheduler
 	{
 		$endDate = new \DateTime(date('Y-m-d H:i:s', time() - self::SHEDULER_MAX_LOG_SECONDS));
 		$this->em->getRepository(SchedulerLog::class)->clearOldLogEntries($endDate);
+	}
+
+	/**
+	 * @return \Sellastica\Project\Entity\Project
+	 */
+	private function getProject(): \Sellastica\Project\Entity\Project
+	{
+		return $this->projectAccessor->get();
 	}
 }
