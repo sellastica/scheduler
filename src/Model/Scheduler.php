@@ -22,6 +22,8 @@ class Scheduler
 	private $container;
 	/** @var \Sellastica\Scheduler\Service\SchedulerService */
 	private $schedulerService;
+	/** @var \Sellastica\Project\Entity\Project */
+	private $project;
 
 
 	/**
@@ -45,6 +47,7 @@ class Scheduler
 
 	public function run()
 	{
+		$this->initialize();
 		$this->setJobsQueue();
 		foreach ($this->queue as $job) {
 			if ($this->hasJobToRun($job)) {
@@ -53,15 +56,18 @@ class Scheduler
 		}
 	}
 
+	private function initialize(): void
+	{
+		$this->project = $this->projectAccessor->get();
+	}
+
 	/**
 	 * Make queue, list all enabled jobs and compute cron if run or not
-	 *
-	 * @return void
 	 */
-	private function setJobsQueue()
+	private function setJobsQueue(): void
 	{
 		$this->queue = $this->em->getRepository(SchedulerJobSetting::class)->findByProjectId(
-			$this->projectAccessor->get()->getId()
+			$this->project->getId()
 		);
 	}
 
@@ -72,15 +78,16 @@ class Scheduler
 	 */
 	private function hasJobToRun(SchedulerJobSetting $jobSetting)
 	{
-		$projectId = $this->projectAccessor->get()->getId();
-		if (!$projectSettings = $this->schedulerService->getProjectSettings($jobSetting->getId(), $projectId)) {
+		if (!$projectSettings = $this->schedulerService->getProjectSettings($jobSetting->getId(), $this->project->getId())) {
+			//job is not assigned to this project
 			return false;
 		} elseif (!$projectSettings->isActive()) {
+			//job is deactivated on this project
 			return false;
 		}
 
-		$lastRunStart = $this->schedulerService->getLastRunStart($jobSetting->getId(), $projectId);
-		$lastRunEnd = $this->schedulerService->getLastRunEnd($jobSetting->getId(), $projectId);
+		$lastRunStart = $this->schedulerService->getLastRunStart($jobSetting->getId(), $this->project->getId());
+		$lastRunEnd = $this->schedulerService->getLastRunEnd($jobSetting->getId(), $this->project->getId());
 
 		if (!$lastRunStart) { //never ran before
 			return true;
@@ -112,7 +119,7 @@ class Scheduler
 		/** @var \Sellastica\Scheduler\Job\AbstractJob $job */
 		$job = $this->container->getByType($jobSetting->getClassName());
 		$job->setJobSetting($jobSetting);
-		$job->setProject($this->projectAccessor->get());
+		$job->setProject($this->project);
 		$job->init($manual);
 
 		return $job->getLogMessages();
