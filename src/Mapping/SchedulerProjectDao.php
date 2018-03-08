@@ -23,7 +23,7 @@ class SchedulerProjectDao extends Dao
 		$second = null
 	): IBuilder
 	{
-		return SchedulerProjectBuilder::create($data->jobId, $data->projectId, $data->period)
+		return SchedulerProjectBuilder::create($data->jobId, $data->period)
 			->hydrate($data);
 	}
 
