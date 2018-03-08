@@ -48,7 +48,7 @@ class SchedulerService
 	{
 		return $this->em->getRepository(\Sellastica\Scheduler\Entity\SchedulerProject::class)->findOneBy([
 			'jobId' => $jobId,
-			'projectId' => $projectId,
+			sprintf('projectId = %s OR projectId IS NULL', $projectId),
 		]);
 	}
 }

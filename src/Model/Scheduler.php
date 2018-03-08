@@ -70,7 +70,10 @@ class Scheduler
 	 */
 	private function hasJobToRun(SchedulerJobSetting $jobSetting)
 	{
-		if (!$projectSettings = $this->schedulerService->getProjectSettings($jobSetting->getId(), $this->getProject()->getId())) {
+		$projectSettings = $this->schedulerService
+			->getProjectSettings($jobSetting->getId(), $this->getProject()->getId());
+
+		if (!$projectSettings) {
 			//job is not assigned to this project
 			return false;
 		} elseif (!$projectSettings->isActive()) {
