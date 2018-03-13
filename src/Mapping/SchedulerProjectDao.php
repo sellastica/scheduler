@@ -30,7 +30,7 @@ class SchedulerProjectDao extends Dao
 	/**
 	 * @return EntityCollection|SchedulerProjectCollection
 	 */
-	protected function getEmptyCollection(): EntityCollection
+	public function getEmptyCollection(): EntityCollection
 	{
 		return new SchedulerProjectCollection;
 	}

@@ -33,7 +33,7 @@ class SchedulerJobSettingDao extends Dao
 	/**
 	 * @return EntityCollection|\Sellastica\Scheduler\Entity\SchedulerJobSettingCollection
 	 */
-	protected function getEmptyCollection(): EntityCollection
+	public function getEmptyCollection(): EntityCollection
 	{
 		return new \Sellastica\Scheduler\Entity\SchedulerJobSettingCollection();
 	}

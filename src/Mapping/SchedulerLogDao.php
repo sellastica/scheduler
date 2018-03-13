@@ -73,7 +73,7 @@ class SchedulerLogDao extends Dao
 	/**
 	 * @return EntityCollection|\Sellastica\Scheduler\Entity\SchedulerLogCollection
 	 */
-	protected function getEmptyCollection(): EntityCollection
+	public function getEmptyCollection(): EntityCollection
 	{
 		return new SchedulerLogCollection();
 	}
