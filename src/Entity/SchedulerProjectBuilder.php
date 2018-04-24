@@ -14,25 +14,22 @@ class SchedulerProjectBuilder implements IBuilder
 	/** @var int */
 	private $jobId;
 	/** @var int */
-	private $projectId;
-	/** @var int */
 	private $period;
+	/** @var int|null */
+	private $projectId;
 	/** @var bool */
 	private $active = false;
 
 	/**
 	 * @param int $jobId
-	 * @param int $projectId
 	 * @param int $period
 	 */
 	public function __construct(
 		int $jobId,
-		int $projectId,
 		int $period
 	)
 	{
 		$this->jobId = $jobId;
-		$this->projectId = $projectId;
 		$this->period = $period;
 	}
 
@@ -47,17 +44,27 @@ class SchedulerProjectBuilder implements IBuilder
 	/**
 	 * @return int
 	 */
-	public function getProjectId(): int
+	public function getPeriod(): int
+	{
+		return $this->period;
+	}
+
+	/**
+	 * @return int|null
+	 */
+	public function getProjectId()
 	{
 		return $this->projectId;
 	}
 
 	/**
-	 * @return int
+	 * @param int|null $projectId
+	 * @return $this
 	 */
-	public function getPeriod(): int
+	public function projectId(int $projectId = null)
 	{
-		return $this->period;
+		$this->projectId = $projectId;
+		return $this;
 	}
 
 	/**
@@ -96,16 +103,14 @@ class SchedulerProjectBuilder implements IBuilder
 
 	/**
 	 * @param int $jobId
-	 * @param int $projectId
 	 * @param int $period
 	 * @return self
 	 */
 	public static function create(
 		int $jobId,
-		int $projectId,
 		int $period
 	): self
 	{
-		return new self($jobId, $projectId, $period);
+		return new self($jobId, $period);
 	}
 }

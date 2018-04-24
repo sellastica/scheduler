@@ -10,9 +10,6 @@ use Sellastica\Scheduler\Entity\SchedulerJobSettingCollection;
  */
 class SchedulerJobSettingRepository extends Repository implements ISchedulerJobSettingRepository
 {
-	use \Sellastica\DataGrid\Mapping\TFilterRulesRepository;
-
-
 	/**
 	 * @param int $projectId
 	 * @return SchedulerJobSettingCollection
