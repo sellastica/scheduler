@@ -8,6 +8,8 @@ use Sellastica\Entity\Entity\TAbstractEntity;
 /**
  * @generate-builder
  * @see SchedulerLogBuilder
+ *
+ * @property SchedulerLogRelations $relationService
  */
 class SchedulerLog extends AbstractEntity implements IEntity
 {
@@ -51,6 +53,22 @@ class SchedulerLog extends AbstractEntity implements IEntity
 	public function getJobId(): int
 	{
 		return $this->jobId;
+	}
+
+	/**
+	 * @return int
+	 */
+	public function getProjectId(): int
+	{
+		return $this->projectId;
+	}
+
+	/**
+	 * @return \Sellastica\Project\Entity\Project
+	 */
+	public function getProject(): \Sellastica\Project\Entity\Project
+	{
+		return $this->relationService->getProject();
 	}
 
 	/**

@@ -8,6 +8,8 @@ use Sellastica\Entity\Entity\TAbstractEntity;
 /**
  * @generate-builder
  * @see SchedulerJobSettingBuilder
+ *
+ * @property \Sellastica\Scheduler\Entity\SchedulerJobSettingRelations $relationService
  */
 class SchedulerJobSetting extends AbstractEntity implements IEntity
 {
@@ -121,6 +123,31 @@ class SchedulerJobSetting extends AbstractEntity implements IEntity
 		$this->priority = $priority;
 	}
 
+	/**
+	 * @param int|null $limit
+	 * @return SchedulerLogCollection
+	 */
+	public function getLog(int $limit = null): SchedulerLogCollection
+	{
+		return $this->relationService->getLog($limit);
+	}
+
+	/**
+	 * @return int
+	 */
+	public function getLogsCount(): int
+	{
+		return $this->relationService->getLogsCount();
+	}
+
+	/**
+	 * @return \Sellastica\Scheduler\Entity\SchedulerProjectCollection
+	 */
+	public function getProjects(): SchedulerProjectCollection
+	{
+		return $this->relationService->getProjects();
+	}
+	
 	/**
 	 * @return array
 	 */

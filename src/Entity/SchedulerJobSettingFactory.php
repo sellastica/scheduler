@@ -14,8 +14,6 @@ use Sellastica\Project\Model\ProjectAccessor;
  */
 class SchedulerJobSettingFactory extends EntityFactory
 {
-	/** @var \Sellastica\Core\Model\Environment */
-	private $environment;
 	/** @var \Sellastica\Project\Entity\IProjectRepository */
 	private $projectRepository;
 	/** @var \Sellastica\Project\Model\ProjectAccessor */
@@ -46,6 +44,7 @@ class SchedulerJobSettingFactory extends EntityFactory
 	 */
 	public function doInitialize(IEntity $entity)
 	{
+		$entity->setRelationService(new SchedulerJobSettingRelations($entity, $this->em));
 	}
 
 	/**

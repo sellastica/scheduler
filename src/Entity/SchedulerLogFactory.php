@@ -11,10 +11,11 @@ use Sellastica\Entity\IBuilder;
 class SchedulerLogFactory extends EntityFactory
 {
 	/**
-	 * @param \Sellastica\Entity\Entity\IEntity $entity
+	 * @param \Sellastica\Entity\Entity\IEntity|\Sellastica\Scheduler\Entity\SchedulerLog $entity
 	 */
 	public function doInitialize(IEntity $entity)
 	{
+		$entity->setRelationService(new SchedulerLogRelations($entity, $this->em));
 	}
 
 	/**

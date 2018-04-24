@@ -28,6 +28,17 @@ class SchedulerProjectDao extends Dao
 	}
 
 	/**
+	 * @param int $jobId
+	 * @return SchedulerProjectCollection
+	 */
+	public function findByJobId(int $jobId): SchedulerProjectCollection
+	{
+		return $this->getEntitiesFromCacheOrStorage(
+			$this->mapper->findByJobId($jobId)
+		);
+	}
+
+	/**
 	 * @return EntityCollection|SchedulerProjectCollection
 	 */
 	public function getEmptyCollection(): EntityCollection

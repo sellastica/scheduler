@@ -11,4 +11,12 @@ use Sellastica\Scheduler\Entity\SchedulerProject;
  */
 class SchedulerProjectRepositoryProxy extends RepositoryProxy implements ISchedulerProjectRepository
 {
+	/**
+	 * @param int $jobId
+	 * @return \Sellastica\Scheduler\Entity\SchedulerProjectCollection
+	 */
+	public function findByJobId(int $jobId): \Sellastica\Scheduler\Entity\SchedulerProjectCollection
+	{
+		return $this->getRepository()->findByJobId($jobId);
+	}
 }

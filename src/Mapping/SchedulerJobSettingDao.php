@@ -12,6 +12,9 @@ use Sellastica\Scheduler\Entity\SchedulerJobSettingCollection;
  */
 class SchedulerJobSettingDao extends Dao
 {
+	use \Sellastica\DataGrid\Mapping\TFilterRulesDao;
+
+
 	/**
 	 * @param int $projectId
 	 * @return \Sellastica\Scheduler\Entity\SchedulerJobSettingCollection

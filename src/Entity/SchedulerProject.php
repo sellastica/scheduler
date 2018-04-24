@@ -8,6 +8,8 @@ use Sellastica\Entity\Entity\TAbstractEntity;
 /**
  * @generate-builder
  * @see SchedulerProjectBuilder
+ *
+ * @property SchedulerProjectRelations $relationService
  */
 class SchedulerProject extends AbstractEntity implements IEntity
 {
@@ -72,6 +74,14 @@ class SchedulerProject extends AbstractEntity implements IEntity
 	}
 
 	/**
+	 * @return \Sellastica\Project\Entity\Project|null
+	 */
+	public function getProject(): ?\Sellastica\Project\Entity\Project
+	{
+		return $this->relationService->getProject();
+	}
+
+	/**
 	 * @return int
 	 */
 	public function getPeriod(): int
@@ -101,6 +111,16 @@ class SchedulerProject extends AbstractEntity implements IEntity
 	public function setActive(bool $active)
 	{
 		$this->active = $active;
+	}
+
+	/**
+	 * @return string|null
+	 */
+	public function getUrl(): ?string
+	{
+		return $this->getProject()
+			? $this->getProject()->getDefaultUrl()->getAbsoluteUrl() . 'scheduler/jobs/' . $this->id
+			: null;
 	}
 
 	/**
