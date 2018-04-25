@@ -82,23 +82,23 @@ class SchedulerLog extends AbstractEntity implements IEntity
 	/**
 	 * @param \DateTime|null $start
 	 */
-	public function setStart(\DateTime $start)
+	public function setStart(\DateTime $start): void
 	{
 		$this->start = $start;
 	}
 
 	/**
-	 * @return \DateTime
+	 * @return \DateTime|null
 	 */
-	public function getEnd(): \DateTime
+	public function getEnd(): ?\DateTime
 	{
 		return $this->end;
 	}
 
 	/**
-	 * @param \DateTime $end
+	 * @param \DateTime|null $end
 	 */
-	public function setEnd(\DateTime $end)
+	public function setEnd(?\DateTime $end): void
 	{
 		$this->end = $end;
 	}
@@ -114,7 +114,7 @@ class SchedulerLog extends AbstractEntity implements IEntity
 	/**
 	 * @param bool $success
 	 */
-	public function setSuccess(bool $success)
+	public function setSuccess(bool $success): void
 	{
 		$this->success = $success;
 	}
@@ -138,7 +138,7 @@ class SchedulerLog extends AbstractEntity implements IEntity
 	/**
 	 * @param string $output
 	 */
-	public function setOutput(string $output)
+	public function setOutput(string $output): void
 	{
 		$this->output = $output;
 	}
