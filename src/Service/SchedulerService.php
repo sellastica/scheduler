@@ -51,4 +51,52 @@ class SchedulerService
 			sprintf('projectId = %s OR projectId IS NULL', $projectId),
 		]);
 	}
+
+	/**
+	 * @param int $jobId
+	 * @param int $projectId
+	 * @param int $period
+	 * @param bool $active
+	 */
+	public function setProjectSettings(
+		int $jobId,
+		int $projectId,
+		int $period,
+		bool $active = true
+	): void
+	{
+		if ($this->em->getRepository(\Sellastica\Scheduler\Entity\SchedulerProject::class)->findOneBy([
+			'jobId' => $jobId,
+			'projectId IS NULL',
+		])) {
+			throw new \Exception("Cannot set job settings for project $projectId. This job is set for all projects already.");
+		}
+
+		if (!$projectSetting = $this->em->getRepository(\Sellastica\Scheduler\Entity\SchedulerProject::class)->findOneBy([
+			'jobId' => $jobId,
+			'projectId' => $projectId,
+		])) {
+			$projectSetting = \Sellastica\Scheduler\Entity\SchedulerProjectBuilder::create($jobId, $period)
+				->projectId($projectId)
+				->build();
+			$this->em->persist($projectSetting);
+		}
+
+		$projectSetting->setPeriod($period);
+		$projectSetting->setActive($active);
+	}
+
+	/**
+	 * @param int $jobId
+	 * @param int $projectId
+	 */
+	public function removeProjectSettings(int $jobId, int $projectId): void
+	{
+		if ($projectSetting = $this->em->getRepository(\Sellastica\Scheduler\Entity\SchedulerProject::class)->findOneBy([
+			'jobId' => $jobId,
+			'projectId' => $projectId,
+		])) {
+			$this->em->remove($projectSetting);
+		}
+	}
 }

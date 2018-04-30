@@ -12,6 +12,10 @@ class Scheduler
 	/** Older log entries after this time (in seconds) will be deleted */
 	const SHEDULER_MAX_LOG_SECONDS = 7776000;
 
+	const HOURLY = 3600,
+		DAILY = 86400,
+		WEEKLY = 604800;
+
 	/** @var SchedulerJobSetting[] */
 	private $queue = [];
 	/** @var EntityManager */
