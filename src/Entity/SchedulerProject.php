@@ -119,7 +119,7 @@ class SchedulerProject extends AbstractEntity implements IEntity
 	public function getUrl(): ?string
 	{
 		return $this->getProject()
-			? $this->getProject()->getDefaultUrl()->getAbsoluteUrl() . 'scheduler/jobs/' . $this->id
+			? $this->getProject()->getDefaultUrl()->getAbsoluteUrl() . 'scheduler/jobs/' . $this->jobId
 			: null;
 	}
 
