@@ -2,8 +2,8 @@
 namespace Sellastica\Scheduler\Mapping;
 
 use Sellastica\Entity\Mapping\Repository;
-use Sellastica\Scheduler\Entity\SchedulerProject;
 use Sellastica\Scheduler\Entity\ISchedulerProjectRepository;
+use Sellastica\Scheduler\Entity\SchedulerProject;
 
 /**
  * @property SchedulerProjectDao $dao

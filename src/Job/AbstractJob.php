@@ -1,11 +1,11 @@
 <?php
 namespace Sellastica\Scheduler\Job;
 
+use Sellastica\Entity\EntityManager;
 use Sellastica\Project\Entity\Project;
 use Sellastica\Scheduler\Entity\SchedulerJobSetting;
 use Sellastica\Scheduler\Entity\SchedulerLog;
 use Sellastica\Scheduler\Entity\SchedulerLogBuilder;
-use Sellastica\Entity\EntityManager;
 
 abstract class AbstractJob
 {

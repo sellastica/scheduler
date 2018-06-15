@@ -9,7 +9,7 @@ use Sellastica\Scheduler\Entity\SchedulerJobSettingCollection;
  */
 class SchedulerJobSettingRepositoryProxy extends RepositoryProxy implements \Sellastica\Scheduler\Entity\ISchedulerJobSettingRepository
 {
-	use \Sellastica\DataGrid\Mapping\TFilterRulesRepositoryProxy;
+	use \Sellastica\DataGrid\Mapping\Dibi\TFilterRulesRepositoryProxy;
 
 
 	public function findByProjectId(int $projectId): SchedulerJobSettingCollection

@@ -5,7 +5,7 @@ use Sellastica\Entity\Mapping\DibiMapper;
 
 class SchedulerJobSettingDibiMapper extends DibiMapper
 {
-	use \Sellastica\DataGrid\Mapping\TFilterRulesDibiMapper;
+	use \Sellastica\DataGrid\Mapping\Dibi\TFilterRulesDibiMapper;
 
 
 	/**

@@ -1,11 +1,11 @@
 <?php
 namespace Sellastica\Scheduler\Mapping;
 
+use Sellastica\Entity\Entity\EntityCollection;
 use Sellastica\Entity\IBuilder;
 use Sellastica\Entity\Mapping\Dao;
 use Sellastica\Scheduler\Entity\SchedulerProject;
 use Sellastica\Scheduler\Entity\SchedulerProjectBuilder;
-use Sellastica\Entity\Entity\EntityCollection;
 use Sellastica\Scheduler\Entity\SchedulerProjectCollection;
 
 /**

@@ -1,9 +1,9 @@
 <?php
 namespace Sellastica\Scheduler\Entity;
 
-use Sellastica\Entity\IBuilder;
-use Sellastica\Entity\Entity\IEntity;
 use Sellastica\Entity\Entity\EntityFactory;
+use Sellastica\Entity\Entity\IEntity;
+use Sellastica\Entity\IBuilder;
 
 /**
  * @method SchedulerProject build(IBuilder $builder, bool $initialize = true, int $assignedId = null)

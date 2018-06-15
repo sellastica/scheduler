@@ -5,14 +5,13 @@ use Sellastica\Entity\Entity\EntityCollection;
 use Sellastica\Entity\IBuilder;
 use Sellastica\Entity\Mapping\Dao;
 use Sellastica\Scheduler\Entity\SchedulerJobSettingBuilder;
-use Sellastica\Scheduler\Entity\SchedulerJobSettingCollection;
 
 /**
  * @property SchedulerJobSettingDibiMapper $mapper
  */
 class SchedulerJobSettingDao extends Dao
 {
-	use \Sellastica\DataGrid\Mapping\TFilterRulesDao;
+	use \Sellastica\DataGrid\Mapping\Dibi\TFilterRulesDao;
 
 
 	/**
