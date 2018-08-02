@@ -17,8 +17,6 @@ class SchedulerJobSetting extends AbstractEntity implements IEntity
 
 	/** @var string @required */
 	private $className;
-	/** @var string|null @optional */
-	private $params;
 	/** @var int|null @optional */
 	private $priority;
 	/** @var bool @optional */
@@ -57,22 +55,6 @@ class SchedulerJobSetting extends AbstractEntity implements IEntity
 	public function setClassName(string $className)
 	{
 		$this->className = $className;
-	}
-
-	/**
-	 * @return null|string
-	 */
-	public function getParams(): ?string
-	{
-		return $this->params;
-	}
-
-	/**
-	 * @param null|string $params
-	 */
-	public function setParams(?string $params)
-	{
-		$this->params = $params;
 	}
 
 	/**
@@ -156,7 +138,6 @@ class SchedulerJobSetting extends AbstractEntity implements IEntity
 		return [
 			'id' => $this->id,
 			'className' => $this->className,
-			'params' => $this->params,
 			'priority' => $this->priority,
 			'manual' => $this->manual,
 			'active' => $this->active,

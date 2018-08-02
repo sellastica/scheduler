@@ -42,6 +42,33 @@ class SchedulerService
 	/**
 	 * @param int $jobId
 	 * @param int $projectId
+	 * @return \DateTime
+	 */
+	public function getAssumedNextStart(int $jobId, int $projectId): \DateTime
+	{
+		$projectSettings = $this->getProjectSettings($jobId, $projectId);
+		$lastRunStart = $this->getLastRunStart($jobId, $projectId);
+		$lastRunEnd = $this->getLastRunEnd($jobId, $projectId);
+		$now = new \DateTime();
+
+		if (!$lastRunStart) { //never ran before
+			return $now;
+		} elseif (!$lastRunEnd) {
+			$assumedStart = clone $lastRunStart;
+		} else {
+			$assumedStart = clone $lastRunEnd;
+		}
+
+		$assumedStart = $assumedStart->add(\DateInterval::createFromDateString(
+			sprintf('+ %s seconds', $projectSettings->getPeriod())
+		));
+
+		return $assumedStart > $now ? $assumedStart : $now;
+	}
+
+	/**
+	 * @param int $jobId
+	 * @param int $projectId
 	 * @return \Sellastica\Scheduler\Entity\SchedulerProject|\Sellastica\Entity\Entity\IEntity|null
 	 */
 	public function getProjectSettings(int $jobId, int $projectId): ?\Sellastica\Scheduler\Entity\SchedulerProject
@@ -53,6 +80,8 @@ class SchedulerService
 	}
 
 	/**
+	 * Adds job or updates existing one
+	 *
 	 * @param string $jobClassName
 	 * @param int $projectId
 	 * @param int $period
@@ -119,7 +148,7 @@ class SchedulerService
 	 * @param string $className
 	 * @return \Sellastica\Scheduler\Entity\SchedulerJobSetting|null
 	 */
-	private function findJobByClassName(string $className): ?\Sellastica\Scheduler\Entity\SchedulerJobSetting
+	public function findJobByClassName(string $className): ?\Sellastica\Scheduler\Entity\SchedulerJobSetting
 	{
 		return $this->em->getRepository(\Sellastica\Scheduler\Entity\SchedulerJobSetting::class)->findOneBy([
 			'className' => $className,

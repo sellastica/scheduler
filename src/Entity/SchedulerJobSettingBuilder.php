@@ -13,8 +13,6 @@ class SchedulerJobSettingBuilder implements IBuilder
 
 	/** @var string */
 	private $className;
-	/** @var string|null */
-	private $params;
 	/** @var int|null */
 	private $priority;
 	/** @var bool */
@@ -36,24 +34,6 @@ class SchedulerJobSettingBuilder implements IBuilder
 	public function getClassName(): string
 	{
 		return $this->className;
-	}
-
-	/**
-	 * @return string|null
-	 */
-	public function getParams()
-	{
-		return $this->params;
-	}
-
-	/**
-	 * @param string|null $params
-	 * @return $this
-	 */
-	public function params(string $params = null)
-	{
-		$this->params = $params;
-		return $this;
 	}
 
 	/**
