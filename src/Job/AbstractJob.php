@@ -111,11 +111,6 @@ abstract class AbstractJob
 		//add message for the output template
 		$dateTime = new \DateTime();
 		$this->log(sprintf('Job finished at %s', $dateTime->format('c')));
-
-		//throw exception
-		if ($e) {
-			throw $e;
-		}
 	}
 
 	/**
