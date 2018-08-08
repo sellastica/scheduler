@@ -19,14 +19,21 @@ abstract class AbstractJob
 	private $logMessages = [];
 	/** @var SchedulerLog */
 	private $log;
+	/** @var \Sellastica\Monolog\Logger */
+	private $logger;
 
 
 	/**
 	 * @param \Sellastica\Entity\EntityManager $em
+	 * @param \Sellastica\Monolog\Logger $logger
 	 */
-	public function __construct(EntityManager $em)
+	public function __construct(
+		EntityManager $em,
+		\Sellastica\Monolog\Logger $logger
+	)
 	{
 		$this->em = $em;
+		$this->logger = $logger->channel('jobs');
 	}
 
 	/**
@@ -63,6 +70,7 @@ abstract class AbstractJob
 			$this->run();
 			$this->finish();
 		} catch (\Throwable $e) {
+			$this->logger->exception($e);
 			$this->log($e->getMessage()); //log into the database
 			$this->finish(false, $e);
 		}

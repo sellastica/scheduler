@@ -156,6 +156,20 @@ class SchedulerService
 	}
 
 	/**
+	 * @param string $jobClassName
+	 * @param int $projectId
+	 * @return bool
+	 */
+	public function isJobSet(string $jobClassName, int $projectId): bool
+	{
+		if (!$job = $this->findJobByClassName($jobClassName)) {
+			return false;
+		}
+
+		return (bool)$this->getProjectSettings($job->getId(), $projectId);
+	}
+
+	/**
 	 * @param int $jobId
 	 * @return bool
 	 */
