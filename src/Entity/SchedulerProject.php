@@ -23,6 +23,8 @@ class SchedulerProject extends AbstractEntity implements IEntity
 	private $projectId;
 	/** @var bool @optional */
 	private $active = false;
+	/** @var \DateTime|null @optional */
+	private $firstRunDelay;
 
 
 	/**
@@ -124,6 +126,22 @@ class SchedulerProject extends AbstractEntity implements IEntity
 	}
 
 	/**
+	 * @return \DateTime|null
+	 */
+	public function getFirstRunDelay(): ?\DateTime
+	{
+		return $this->firstRunDelay;
+	}
+
+	/**
+	 * @param \DateTime|null $firstRunDelay
+	 */
+	public function setFirstRunDelay(?\DateTime $firstRunDelay): void
+	{
+		$this->firstRunDelay = $firstRunDelay;
+	}
+
+	/**
 	 * @return array
 	 */
 	public function toArray(): array
@@ -134,6 +152,7 @@ class SchedulerProject extends AbstractEntity implements IEntity
 			'projectId' => $this->projectId,
 			'period' => $this->period,
 			'active' => $this->active,
+			'firstRunDelay' => $this->firstRunDelay,
 		];
 	}
 }

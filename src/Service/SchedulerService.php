@@ -86,6 +86,7 @@ class SchedulerService
 	 * @param int $projectId
 	 * @param int $period
 	 * @param bool $active
+	 * @return \Sellastica\Scheduler\Entity\SchedulerProject
 	 * @throws \Exception
 	 */
 	public function addProject(
@@ -93,7 +94,7 @@ class SchedulerService
 		int $projectId,
 		int $period,
 		bool $active = true
-	): void
+	): \Sellastica\Scheduler\Entity\SchedulerProject
 	{
 		//find job by class name
 		if (!$job = $this->findJobByClassName($jobClassName)) {
@@ -118,6 +119,8 @@ class SchedulerService
 
 		$projectSetting->setPeriod($period);
 		$projectSetting->setActive($active);
+
+		return $projectSetting;
 	}
 
 	/**

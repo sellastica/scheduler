@@ -85,26 +85,28 @@ class Scheduler
 			return false;
 		}
 
+		$now = new \DateTime('now');
 		$lastRunStart = $this->schedulerService->getLastRunStart($jobSetting->getId(), $this->getProject()->getId());
 		$lastRunEnd = $this->schedulerService->getLastRunEnd($jobSetting->getId(), $this->getProject()->getId());
 
 		if (!$lastRunStart) { //never ran before
-			return true;
+			return !$projectSettings->getFirstRunDelay()
+				|| $projectSettings->getFirstRunDelay() <= $now;
 		} elseif (!$lastRunEnd) {
 			//end timestamp may not be logged because of some server error
 			//in that case, we cannot disable jobs for ever!
 			//so, we run all jobs with last start older than one day
 			$lastStart = clone $lastRunStart;
-			//add one day interval
-			$lastStart->add(new \DateInterval('P1D'));
-			if ($lastStart < new \DateTime('now')) { //if last start was earlier then before one day
+			//add 4 hours interval
+			$lastStart->add(new \DateInterval('PT4H'));
+			if ($lastStart < $now) { //if last start was earlier then before 4 hours
 				return true;
 			} else {
 				return false;
 			}
 		}
 
-		return $lastRunEnd->getTimestamp()
+		return $lastRunStart->getTimestamp()
 			+ $projectSettings->getPeriod() <= time();
 	}
 

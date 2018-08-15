@@ -19,6 +19,8 @@ class SchedulerProjectBuilder implements IBuilder
 	private $projectId;
 	/** @var bool */
 	private $active = false;
+	/** @var \DateTime|null */
+	private $firstRunDelay;
 
 	/**
 	 * @param int $jobId
@@ -82,6 +84,24 @@ class SchedulerProjectBuilder implements IBuilder
 	public function active(bool $active)
 	{
 		$this->active = $active;
+		return $this;
+	}
+
+	/**
+	 * @return \DateTime|null
+	 */
+	public function getFirstRunDelay()
+	{
+		return $this->firstRunDelay;
+	}
+
+	/**
+	 * @param \DateTime|null $firstRunDelay
+	 * @return $this
+	 */
+	public function firstRunDelay(\DateTime $firstRunDelay = null)
+	{
+		$this->firstRunDelay = $firstRunDelay;
 		return $this;
 	}
 
