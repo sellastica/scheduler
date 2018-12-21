@@ -51,7 +51,7 @@ class Scheduler
 	{
 		$this->setJobsQueue();
 		foreach ($this->queue as $job) {
-			if ($this->hasJobToRun($job)) {
+			if ($this->schedulerService->hasJobToRun($job, $this->getProject())) {
 				$this->runJob($job);
 			}
 		}
@@ -65,49 +65,6 @@ class Scheduler
 		$this->queue = $this->em->getRepository(SchedulerJobSetting::class)->findByProjectId(
 			$this->getProject()->getId()
 		);
-	}
-
-	/**
-	 * @param SchedulerJobSetting $jobSetting
-	 * @return bool
-	 * @throws \Exception
-	 */
-	private function hasJobToRun(SchedulerJobSetting $jobSetting)
-	{
-		$projectSettings = $this->schedulerService
-			->getProjectSettings($jobSetting->getId(), $this->getProject()->getId());
-
-		if (!$projectSettings) {
-			//job is not assigned to this project
-			return false;
-		} elseif (!$projectSettings->isActive()) {
-			//job is deactivated on this project
-			return false;
-		}
-
-		$now = new \DateTime('now');
-		$lastRunStart = $this->schedulerService->getLastRunStart($jobSetting->getId(), $this->getProject()->getId());
-		$lastRunEnd = $this->schedulerService->getLastRunEnd($jobSetting->getId(), $this->getProject()->getId());
-
-		if (!$lastRunStart) { //never ran before
-			return !$projectSettings->getFirstRunDelay()
-				|| $projectSettings->getFirstRunDelay() <= $now;
-		} elseif (!$lastRunEnd) {
-			//end timestamp may not be logged because of some server error
-			//in that case, we cannot disable jobs for ever!
-			//so, we run all jobs with last start older than one day
-			$lastStart = clone $lastRunStart;
-			//add 4 hours interval
-			$lastStart->add(new \DateInterval('PT4H'));
-			if ($lastStart < $now) { //if last start was earlier then before 4 hours
-				return true;
-			} else {
-				return false;
-			}
-		}
-
-		return $lastRunStart->getTimestamp()
-			+ $projectSettings->getPeriod() <= time();
 	}
 
 	/**

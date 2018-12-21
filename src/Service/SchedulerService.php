@@ -173,6 +173,51 @@ class SchedulerService
 	}
 
 	/**
+	 * @param \Sellastica\Scheduler\Entity\SchedulerJobSetting $jobSetting
+	 * @param \Sellastica\Project\Entity\Project $project
+	 * @return bool
+	 */
+	public function hasJobToRun(
+		\Sellastica\Scheduler\Entity\SchedulerJobSetting $jobSetting,
+		\Sellastica\Project\Entity\Project $project
+	): bool
+	{
+		$projectSettings = $this->getProjectSettings($jobSetting->getId(), $project->getId());
+
+		if (!$projectSettings) {
+			//job is not assigned to this project
+			return false;
+		} elseif (!$projectSettings->isActive()) {
+			//job is deactivated on this project
+			return false;
+		}
+
+		$now = new \DateTime('now');
+		$lastRunStart = $this->getLastRunStart($jobSetting->getId(), $project->getId());
+		$lastRunEnd = $this->getLastRunEnd($jobSetting->getId(), $project->getId());
+
+		if (!$lastRunStart) { //never ran before
+			return !$projectSettings->getFirstRunDelay()
+				|| $projectSettings->getFirstRunDelay() <= $now;
+		} elseif (!$lastRunEnd) {
+			//end timestamp may not be logged because of some server error
+			//in that case, we cannot disable jobs for ever!
+			//so, we run all jobs with last start older than one day
+			$lastStart = clone $lastRunStart;
+			//add 4 hours interval
+			$lastStart->add(new \DateInterval('PT4H'));
+			if ($lastStart < $now) { //if last start was earlier then before 4 hours
+				return true;
+			} else {
+				return false;
+			}
+		}
+
+		return $lastRunStart->getTimestamp()
+			+ $projectSettings->getPeriod() <= time();
+	}
+
+	/**
 	 * @param int $jobId
 	 * @return bool
 	 */

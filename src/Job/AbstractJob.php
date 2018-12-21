@@ -67,7 +67,7 @@ abstract class AbstractJob
 		$this->em->flush();
 
 		try {
-			$this->run();
+			$this->run($manual);
 			$this->finish();
 		} catch (\Throwable $e) {
 			$this->logger->exception($e);
@@ -114,7 +114,8 @@ abstract class AbstractJob
 	}
 
 	/**
+	 * @param bool $manual
 	 * @return void
 	 */
-	abstract protected function run();
+	abstract protected function run(bool $manual);
 }
